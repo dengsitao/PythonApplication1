@@ -1,6 +1,7 @@
 from __future__ import division
 import numpy as np
 import time,datetime
+import os.path
 
 def normalize(X):
     return (X-np.mean(X))/np.std(X)
@@ -11,13 +12,19 @@ class layer:
     output_dim = 0
     alpha = 0.01
 
-    def __init__(self, input_dim, output_dim, act_func, act_func_deri, alpha):
+    def __init__(self, input_dim, output_dim, act_func, act_func_deri, alpha, id):
         self.alpha=alpha
         self.input_dim=input_dim
         self.output_dim=output_dim
         self.activate_function=act_func
         self.d_act_func=act_func_deri
-        self.lyr_weight=np.random.uniform(-0.1,0.1,(input_dim+1,output_dim))
+        if(os.path.isfile('weight_lyr_'+str(id))):
+            self.lyr_weight=np.fromfile('weight_lyr_'+str(id))
+            self.lyr_weight=self.lyr_weight.reshape(input_dim+1,output_dim)
+            print('init layer: '+str(id) + ' with existing weights '+str(input_dim)+'x'+str(output_dim))
+        else:
+            self.lyr_weight=np.random.uniform(-0.1,0.1,(input_dim+1,output_dim))
+            print('init layer: '+str(id) + ' with random numbers')
 
     def forward_prop(self, X):
         self.X=X
@@ -33,11 +40,15 @@ class layer:
         delta2=np.dot(delta, w2.T)*self.d_act_func(self.X)
         return delta2
     def backward_prop(self, delta):
-
         a21=np.c_[[1], self.X]
         d2=np.dot(delta.T, a21).T
         #print  'input_dim=',self.input_dim,'output_dim=',self.output_dim,'lyr_weight.shape=',self.lyr_weight.shape,'d2.shape=',d2.shape,'alpha.shape=',self.alpha
         self.lyr_weight-=self.alpha*(d2)
+
+    def weight_to_file(self, id):
+        file2write=open('weight_lyr_'+str(id), 'wb')
+        self.lyr_weight.tofile(file2write)
+        file2write.close()
         
 
 class layer_param:
@@ -49,8 +60,9 @@ class layer_param:
         self.alpha=alpha
 
 class nnetwork:
-    def __init__(self, X, Y, sample_num, layer_num, layer_param, input_dim, output_dim, epochs):
+    def __init__(self, X, Y, sample_num, layer_num, layer_param, input_dim, output_dim, epochs, threshold):
         time1=time.time()
+        self.threshold=threshold
         self.epochs=epochs
         self.train_num=int(sample_num*9/10)
         self.validate_num=sample_num-self.train_num
@@ -61,8 +73,12 @@ class nnetwork:
         self.layer_num=layer_num
         self.layers=[]
         for i in range(layer_num):
-            self.layers.append(layer(layer_param[i].input_dim, layer_param[i].output_dim, layer_param[i].act_func, layer_param[i].act_deri, layer_param[i].alpha))
-            self.layers[i].weights=np.random.uniform(-0.1,0.1,(layer_param[i].input_dim+1,layer_param[i].output_dim))
+            self.layers.append(layer(layer_param[i].input_dim, layer_param[i].output_dim, layer_param[i].act_func, layer_param[i].act_deri, layer_param[i].alpha, i))
+            #if(os.path.isfile('weight_lyr_'+str(i))):
+            #    self.layers[i].lyr_weights=np.fromfile('weight_lyr_'+str(i))
+            #    print('use existing param')
+            #else:
+            #    self.layers[i].weights=np.random.uniform(-0.1,0.1,(layer_param[i].input_dim+1,layer_param[i].output_dim))
         self.sample_size=input_dim
         self.output_dim=output_dim
         print ('init use ',time.time()-time1)
@@ -98,7 +114,7 @@ class nnetwork:
             accuracy=self.validate()
             print ('training', k,'done, accuracy=',accuracy)
             print ('validate',k,' use ',time.time()-time1)
-            if accuracy > 0.95:
+            if accuracy > self.threshold:
                 break
         print ('----training finish----')
 
@@ -139,6 +155,10 @@ class nnetwork:
             else:
                 wrong_num+=1
         return right_num, wrong_num
+
+    def dump2file(self):
+        for j in range(self.layer_num):
+            self.layers[j].weight_to_file(j)
 
         
 

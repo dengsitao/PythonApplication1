@@ -6,7 +6,7 @@
     <ProjectGuid>54532019-ca19-4a99-bb72-6008ba2f04c3</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>mynn_ce_rf.py</StartupFile>
+    <StartupFile>Camera.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -26,7 +26,7 @@
     <Compile Include="mynn_base.py" />
     <Compile Include="mynn_ce_rf.py" />
     <Compile Include="mynn_utils.py" />
-    <Compile Include="PythonApplication1.py" />
+    <Compile Include="Camera.py" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
