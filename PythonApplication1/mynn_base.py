@@ -137,7 +137,7 @@ class nnetwork:
         accuracy=right/self.validate_num
         return accuracy
 
-    def predict(self, Xp, Yp, sample_num):
+    def predict_validate(self, Xp, Yp, sample_num):
         right_num=0
         wrong_num=0
         for i in range(sample_num):
@@ -155,6 +155,13 @@ class nnetwork:
             else:
                 wrong_num+=1
         return right_num, wrong_num
+
+    def predict(self, X):
+        X=X.reshape(1, self.sample_size)
+        for j in range(self.layer_num):
+            X=self.layers[j].forward_prop(X)
+            pred_y=np.argmax(X)
+        return pred_y
 
     def dump2file(self):
         for j in range(self.layer_num):

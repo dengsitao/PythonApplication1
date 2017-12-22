@@ -110,9 +110,9 @@ Xa=mybs.normalize(Xa)
 # print 'X1', imgNum1, imgRow1, imgCol1, Xa1.shape, 'Y1', lblNum1, Ya1.shape
 # imgNum, imgRow, imgCol, lblNum, Xa, Ya = myutils.loadMNISTData()
 # print 'X', imgNum, imgRow, imgCol, Xa.shape, 'Y', lblNum, Ya.shape
-# for i in range(10):
-#     img=Xa[i].reshape(imgRow, imgCol)
-#     showImg(img)
+#for i in range(10):
+#    img=Xa[i].reshape(imgRow, imgCol)
+#    showImg(img)
 #     print 'Ya[',i,']=', Ya[i]
 # for i in range(imgNum):
 #     for j in range(imgRow*imgCol):
@@ -145,45 +145,44 @@ print('----validate before train----')
 timgNum, timgRow, timgCol, Xt = myutils.load_image_data('t10k-images.idx3-ubyte', 0)
 tlblNum, Yt = myutils.load_label_data('t10k-labels.idx1-ubyte',0)
 Xt=mybs.normalize(Xt)
-right_num, wrong_num = nnetwork.predict(Xt, Yt, timgNum)
+right_num, wrong_num = nnetwork.predict_validate(Xt, Yt, timgNum)
 test_accuracy=right_num/(right_num+wrong_num)
 print ('validate accuracy=', test_accuracy)
 if (test_accuracy>threshold):
     print('no need to train')
-    exit()
+else:
+    print ('----finish read data----')
 
-print ('----finish read data----')
+    nnetwork.train()
 
-nnetwork.train()
+    print ('----nnetwork.train finish----')
 
-print ('----nnetwork.train finish----')
+    print ('train finish')
 
-print ('train finish')
+    #timagef = open('t10k-images.idx3-ubyte', 'rb')
+    #tlabelf = open('t10k-labels.idx1-ubyte', 'rb')
 
-#timagef = open('t10k-images.idx3-ubyte', 'rb')
-#tlabelf = open('t10k-labels.idx1-ubyte', 'rb')
+    #tmagic, timgNum=struct.unpack(">II", timagef.read(8))
+    #timgRow, timgCol =struct.unpack(">II", timagef.read(8))
+    #print (tmagic, timgNum, timgRow, timgCol)
+    #tlblMagic, tlblNum=struct.unpack(">II", tlabelf.read(8))
+    #print (tlblMagic, tlblNum)
 
-#tmagic, timgNum=struct.unpack(">II", timagef.read(8))
-#timgRow, timgCol =struct.unpack(">II", timagef.read(8))
-#print (tmagic, timgNum, timgRow, timgCol)
-#tlblMagic, tlblNum=struct.unpack(">II", tlabelf.read(8))
-#print (tlblMagic, tlblNum)
+    #Xt=np.zeros((timgNum, timgRow*imgCol))
+    #Yt=np.zeros((tlblNum, 1))
+    print ('----start read validate data----')
+    #for i in range(timgNum):
+    #    Xt[i, range(timgRow*timgCol)]=np.fromfile(timagef, np.uint8, timgRow*timgCol)
+    #    Yt[i, 0]=np.fromfile(tlabelf, np.uint8, 1)
+    ##Xt=sigmoid(Xt)
+    ##Xt=(Xt-np.mean(Xt))/np.std(Xt)
+    #Xt=mybs.normalize(Xt)
+    ## test_accuracy=predict(Xt, Yt, nnetwork.layers[0].lyr_weight, nnetwork.layers[1].lyr_weight)
+    right_num, wrong_num = nnetwork.predict_validate(Xt, Yt, timgNum)
+    test_accuracy=right_num/(right_num+wrong_num)
 
-#Xt=np.zeros((timgNum, timgRow*imgCol))
-#Yt=np.zeros((tlblNum, 1))
-print ('----start read validate data----')
-#for i in range(timgNum):
-#    Xt[i, range(timgRow*timgCol)]=np.fromfile(timagef, np.uint8, timgRow*timgCol)
-#    Yt[i, 0]=np.fromfile(tlabelf, np.uint8, 1)
-##Xt=sigmoid(Xt)
-##Xt=(Xt-np.mean(Xt))/np.std(Xt)
-#Xt=mybs.normalize(Xt)
-## test_accuracy=predict(Xt, Yt, nnetwork.layers[0].lyr_weight, nnetwork.layers[1].lyr_weight)
-right_num, wrong_num = nnetwork.predict(Xt, Yt, timgNum)
-test_accuracy=right_num/(right_num+wrong_num)
+    print ('test accuracy=', test_accuracy)
 
-print ('test accuracy=', test_accuracy)
-
-nnetwork.dump2file()
+    nnetwork.dump2file()
     
 
