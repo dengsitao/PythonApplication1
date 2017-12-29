@@ -1,7 +1,27 @@
 import numpy as np
 import struct
+import matplotlib.pyplot as plt
+import matplotlib as mpl
 
 import mynn_base as mybs
+
+def load_real_image_data(file_name):
+    img_file=open(file_name, 'rb')
+    data=np.fromfile(img_file)
+    img_num=int(data.shape[0]/28/28)
+    data=data.reshape(img_num, 28*28)
+    img_file.close()
+    return img_num, data
+    
+def load_real_label_data(file_name, count):
+    lblfile=open(file_name, 'rb')
+    Ya=np.zeros((count, 1))
+    for i in range(count):
+        #Ya[i, 0]=np.fromfile(file_name, np.uint8, 1)
+        Ya[i, 0]=ord(lblfile.read(1))
+        #print('read ',str(i),' =',Ya[i,0])
+    lblfile.close()
+    return count, Ya
 
 def load_image_data(file_name, offset):
     #imgfile = open('./data/train-images-idx3-ubyte', 'rb')
@@ -71,3 +91,15 @@ def loadMNISTData():
     #print 'Ya[',i,']=', Ya[i]
     return imgNum, imgRow, imgCol, lblNum, Xa, Ya
     
+def showImg(image):
+    """
+    Render a given numpy.uint8 2D array of pixel data.
+    """
+    #from matplotlib import pyplot
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    imgplot = ax.imshow(image, mpl.cm.Greys)
+    imgplot.set_interpolation('nearest')
+    ax.xaxis.set_ticks_position('top')
+    ax.yaxis.set_ticks_position('left')
+    plt.show()
