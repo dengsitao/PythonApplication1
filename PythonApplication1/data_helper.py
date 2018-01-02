@@ -2,6 +2,8 @@ import numpy as np
 import mynn_utils as myutils
 import math
 
+import mydefs as defs
+
 #used for manually tag data
 def tag_data(data_file, label_file, col, row):
     data=open(data_file, 'rb')
@@ -104,27 +106,72 @@ def dup_data(data_file, label_file, col, row, flag2file):
 
 #dup_data('img_data', 'lbl_data', 28, 28, 1)
 #data=np.zeros((3,3))
+
 def read_and_show():
     imgNum, Xa = myutils.load_real_image_data('img_data_validate')
     lblNum, Ya = myutils.load_real_label_data('img_label_validate',imgNum)
     print(Xa.shape)
     for i in range(5):
         img=Xa[i]
-        img=img.reshape(28,28)
+        img=img.reshape(row,col)
         print('y=',str(Ya[i]))
         myutils.showImg(img)
-    
-imgNum, Xa = myutils.load_real_image_data('img_data')
-lblfile=open('lbl_data', 'rb')
-Ya=np.zeros((imgNum, 1))
-for i in range(imgNum):
-    #Ya[i, 0]=np.fromfile(file_name, np.uint8, 1)
-    Ya[i, 0]=ord(lblfile.read(1))
-    print('read ',str(i),' =',Ya[i,0])
-lblfile.close()
-myutils.showImg(Xa[imgNum-4].reshape(28,28))
-myutils.showImg(Xa[imgNum-3].reshape(28,28))
-myutils.showImg(Xa[imgNum-2].reshape(28,28))
-myutils.showImg(Xa[imgNum-1].reshape(28,28))
-print('imgNm=',str(imgNum))
+
+#frame=np.ones((128,128))
+#print(frame.shape)
+#datafile=open('img_data','ab')
+#crop_image1=np.zeros((row,col))
+#crop_image2=np.zeros((row,col))
+#crop_image3=np.zeros((row,col))
+#crop_image4=np.zeros((row,col))
+#crop_image1=frame[0:56,0:28]
+#crop_image2=frame[0:56,0:28]
+#crop_image3=frame[0:56,0:28]
+#crop_image4=frame[0:56,0:28]
+#crop_image1.tofile(datafile)
+#crop_image2.tofile(datafile)
+#crop_image3.tofile(datafile)
+#crop_image4.tofile(datafile)
+#datafile.close()
+
+
+
+
+
+
+
+def trim_data():
+    imgNum, Xa = myutils.load_real_image_data('img_data_validate', defs.row, defs.col*2)
+    print('imgNm=',str(imgNum))
+    real_data=np.zeros((imgNum,defs.row*defs.col))
+    for i in range(imgNum):
+        tdata=Xa[i].reshape(defs.row, defs.col*2)
+        rdata=real_data[i].reshape(defs.row, defs.col)
+        rdata=np.copy(tdata[:, 7:21])
+        real_data[i]=rdata.reshape(1, defs.row*defs.col)
+    #print(real_data.shape)
+
+    wtfile=open('img_data_validate_trim', 'ab')
+    real_data.tofile(wtfile)
+    wtfile.close()
+
+    rtfile=open('img_data_validate_trim', 'rb')
+    data=np.fromfile(rtfile)
+    data=data.reshape(imgNum, defs.row*defs.col)
+    for i in range(3):
+        myutils.showImg(data[i].reshape(defs.row, defs.col))
+rtfile.close()
+
+#lblfile=open('lbl_data', 'rb')
+#Ya=np.zeros((imgNum, 1))
+#for i in range(imgNum):
+#    #Ya[i, 0]=np.fromfile(file_name, np.uint8, 1)
+#    Ya[i, 0]=ord(lblfile.read(1))
+#    print('read ',str(i),' =',Ya[i,0])
+#lblfile.close()
+#myutils.showImg(Xa[0].reshape(row,col))
+#myutils.showImg(Xa[3].reshape(row,col))
+#myutils.showImg(Xa[imgNum-2].reshape(row,col))
+#myutils.showImg(Xa[imgNum-1].reshape(row,col))
+
 

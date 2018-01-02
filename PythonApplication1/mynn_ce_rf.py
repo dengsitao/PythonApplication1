@@ -8,6 +8,8 @@ import math
 
 import mynn_base as mybs
 import mynn_utils as myutils
+import mydefs as defs
+
 np.random.seed(0)
 ## compute sigmoid nonlinearity
 def sigmoid(x):
@@ -60,7 +62,7 @@ def predict(Xi, Yi, weight1, weight2):
         #read a 28x28 image and a byte label
         #X=Xa[j+imgNum-valiNum]
         X=Xi[j]
-        X=X.reshape(1,28*28)
+        X=X.reshape(1,defs.row*defs.col)
         y=Yi[j]
         #y=Ya[j+imgNum-valiNum]
         #Forward propagation
@@ -81,12 +83,14 @@ do_stochastic=0
 #default params
 alpha = 0.003
 #lamda = 0.1#alpha*alpha
-input_dim = 28*28
+row=defs.row
+col=defs.col
+input_dim = row*col
 hidden_dim1 = 500
 hidden_dim2 = 300
 output_dim = 10
 threshold=0.95
-epoch=100
+epoch=10
 layer_num=3
 
 #layer_param1=mybs.layer_param(input_dim, hidden_dim1, sigmoid, sigm_deri, alpha)
@@ -104,9 +108,9 @@ if (do_stochastic==0):
     print('----try before train----')
     #timgNum, timgRow, timgCol, Xt = myutils.load_image_data('t10k-images.idx3-ubyte', 0)
     #tlblNum, Yt = myutils.load_label_data('t10k-labels.idx1-ubyte',0)
-    timgRow=28
-    timgCol=28
-    timgNum, Xt = myutils.load_real_image_data('img_data_validate')
+    timgRow=row
+    timgCol=col
+    timgNum, Xt = myutils.load_real_image_data('img_data_validate_trim', row, col)
     tlblNum, Yt = myutils.load_real_label_data('img_label_validate', timgNum)
     #Xt=255-Xt
     Xt=mybs.normalize(Xt)
@@ -121,9 +125,9 @@ if (do_stochastic==0):
         #imgNum, imgRow, imgCol, Xa = myutils.load_image_data('train-images.idx3-ubyte', 0)
         #lblNum, Ya = myutils.load_label_data('train-labels.idx1-ubyte',0)
         #this is for camera captured
-        imgRow=28
-        imgCol=28
-        imgNum, Xa = myutils.load_real_image_data('img_data')
+        imgRow=row
+        imgCol=col
+        imgNum, Xa = myutils.load_real_image_data('img_data_trim', row, col)
         lblNum, Ya = myutils.load_real_label_data('lbl_data',imgNum)
         Xa=mybs.normalize(Xa)
         valiNum=int(imgNum/10)

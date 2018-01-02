@@ -4,12 +4,17 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 import mynn_base as mybs
+import mydefs as defs
 
-def load_real_image_data(file_name):
+#row=defs.row
+#col=defs.col*2
+
+
+def load_real_image_data(file_name, row, col):
     img_file=open(file_name, 'rb')
     data=np.fromfile(img_file)
-    img_num=int(data.shape[0]/28/28)
-    data=data.reshape(img_num, 28*28)
+    img_num=int(data.shape[0]/row/col)
+    data=data.reshape(img_num, row*col)
     img_file.close()
     return img_num, data
     
@@ -18,7 +23,12 @@ def load_real_label_data(file_name, count):
     Ya=np.zeros((count, 1))
     for i in range(count):
         #Ya[i, 0]=np.fromfile(file_name, np.uint8, 1)
-        Ya[i, 0]=ord(lblfile.read(1))
+        ytemp=lblfile.read(1)
+        #print('count=',str(count),'  i=',str(i))
+        #if (len(ytemp)==0):
+        #    print('a zero length ',str(i))
+        #else:
+        Ya[i, 0]=ord(ytemp)
         #print('read ',str(i),' =',Ya[i,0])
     lblfile.close()
     return count, Ya

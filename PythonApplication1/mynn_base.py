@@ -3,6 +3,7 @@ import numpy as np
 import time,datetime
 import os.path
 import mynn_utils as util
+import mydefs as defs
 
 def normalize(X):
     return (X-np.mean(X))/np.std(X)

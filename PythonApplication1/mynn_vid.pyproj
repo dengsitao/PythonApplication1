@@ -26,6 +26,9 @@
     <Compile Include="data_helper.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mydefs.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="fourcc.py" />
     <Compile Include="mynn_base.py" />
     <Compile Include="mynn_ce_rf.py" />

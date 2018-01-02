@@ -5,42 +5,49 @@ import fourcc
 #----my nn include---
 import mynn_ce_rf as nn
 import numpy as np
+import mydefs as defs
 
 cv2.namedWindow("preview")
-vc = cv2.VideoCapture(1)
+vc = cv2.VideoCapture(0)
 
 if vc.isOpened(): # try to get the first frame
     rval, frame = vc.read()
 else:
     rval = False
 #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-x=30
-y=30
+x=defs.start_x
+y=defs.start_y
+row=defs.row
+col=defs.col
 #datafile=open('img_data_validate', 'ab')
 #labelfile=open('img_label_validate', 'ab')
 datafile=open('img_data', 'ab')
 labelfile=open('lbl_data', 'ab')
-crop_image1=np.zeros((28,28))
-crop_image2=np.zeros((28,28))
-crop_image3=np.zeros((28,28))
-crop_image4=np.zeros((28,28))
+crop_image1=np.zeros((row,col))
+crop_image2=np.zeros((row,col))
+crop_image3=np.zeros((row,col))
+crop_image4=np.zeros((row,col))
 while rval:
     #cv2.imshow("preview", frame)
     rval, frame = vc.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    frame[x:x+28,y:y+1]=255
-    frame[x:x+28,y+14:y+1+14]=255
-    frame[x:x+28,y+28:y+1+28]=255
-    frame[x:x+28,y+42:y+1+42]=255
-    frame[x:x+28,y+56:y+56+1]=255
-    frame[x:x+1,y:y+56]=255
-    frame[x+28:x+28+1,y:y+56]=255
+    frame[x:x+row,y:y+1]=255
+    frame[x:x+row,y+col:y+1+col]=255
+    frame[x:x+row,y+col*2:y+1+col*2]=255
+    frame[x:x+row,y+col*3:y+1+col*3]=255
+    frame[x:x+row,y+col*4:y+col*4+1]=255
+    frame[x:x+1,y:y+col*4]=255
+    frame[x+row:x+row+1,y:y+col*4]=255
     gray=255-gray
-    rec_image=gray[x:x+28,y-7:y+56+7]
-    crop_image1[0:28,7:21]=rec_image[0:0+28,7:7+14]
-    crop_image2[0:28,7:21]=rec_image[0:0+28,7+14:7+14+14]
-    crop_image3[0:28,7:21]=rec_image[0:0+28,7+14+14:7+14+14+14]
-    crop_image4[0:28,7:21]=rec_image[0:0+28,7+14+14+14:7+14+14+14+14]
+    rec_image=gray[x:x+row,y:y+col*4]
+    #crop_image1[0:row,7:21]=rec_image[0:row,7:7+14]
+    #crop_image2[0:row,7:21]=rec_image[0:row,7+14:7+14+14]
+    #crop_image3[0:row,7:21]=rec_image[0:row,7+14+14:7+14+14+14]
+    #crop_image4[0:row,7:21]=rec_image[0:row,7+14+14+14:7+14+14+14+14]
+    crop_image1[0:row,0:col]=rec_image[0:row,0:col]
+    crop_image2[0:row,0:col]=rec_image[0:row,col:col*2]
+    crop_image3[0:row,0:col]=rec_image[0:row,col*2:col*3]
+    crop_image4[0:row,0:col]=rec_image[0:row,col*3:col*4]
     
     pred1=nn.nnetwork.predict(crop_image1)#.reshape(1, 28*28))
     pred2=nn.nnetwork.predict(crop_image2)
