@@ -86,21 +86,30 @@ alpha = 0.003
 row=defs.row
 col=defs.col
 input_dim = row*col
-hidden_dim1 = 2000
-hidden_dim2 = 600
+hidden_dim1 = 3000
+hidden_dim2 = 1500
+hidden_dim3 = 500
 output_dim = 10
 threshold=0.95
-epoch=0
-layer_num=3
+epoch=10
 
+#layer_num=2
 #layer_param1=mybs.layer_param(input_dim, hidden_dim1, sigmoid, sigm_deri, alpha)
 #layer_param2=mybs.layer_param(hidden_dim1, output_dim, softmax, sigm_deri, alpha)
 #layer_param=[layer_param1, layer_param2]
 
+#layer_num=3
+#layer_param1=mybs.layer_param(input_dim, hidden_dim1, relu, relu_deri, alpha)
+#layer_param2=mybs.layer_param(hidden_dim1, hidden_dim2, sigmoid, relu_deri, alpha)
+#layer_param3=mybs.layer_param(hidden_dim2, output_dim, softmax, sigm_deri, alpha)
+#layer_param=[layer_param1, layer_param2, layer_param3]
+
+layer_num=4
 layer_param1=mybs.layer_param(input_dim, hidden_dim1, relu, relu_deri, alpha)
 layer_param2=mybs.layer_param(hidden_dim1, hidden_dim2, sigmoid, relu_deri, alpha)
-layer_param3=mybs.layer_param(hidden_dim2, output_dim, softmax, sigm_deri, alpha)
-layer_param=[layer_param1, layer_param2, layer_param3]
+layer_param3=mybs.layer_param(hidden_dim2, hidden_dim3, sigmoid, sigm_deri, alpha)
+layer_param4=mybs.layer_param(hidden_dim3, output_dim, softmax, sigm_deri, alpha)
+layer_param=[layer_param1, layer_param2, layer_param3, layer_param4]
 
 nnetwork = mybs.nnetwork(layer_num, layer_param, input_dim, output_dim, epoch, threshold)
 
