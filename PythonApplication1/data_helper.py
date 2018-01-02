@@ -160,10 +160,24 @@ def trim_data():
     data=data.reshape(imgNum, defs.row*defs.col)
     for i in range(3):
         myutils.showImg(data[i].reshape(defs.row, defs.col))
-rtfile.close()
+    rtfile.close()
 
-#lblfile=open('lbl_data', 'rb')
-#Ya=np.zeros((imgNum, 1))
+imgNum, Xa = myutils.load_real_image_data('img_data', defs.row, defs.col)
+
+print('imgNm=',str(imgNum))
+lblfile=open('lbl_data', 'rb')
+y=np.zeros((imgNum))
+for i in range(imgNum):
+    y[i]=ord(lblfile.read(1))
+lblfile.close()
+
+for i in range(10):
+    index=i*10+1
+    #y=ord(lblfile.read(1))
+    print('y=',str(y[index]))
+    myutils.showImg(Xa[index].reshape(defs.row,defs.col))
+
+
 #for i in range(imgNum):
 #    #Ya[i, 0]=np.fromfile(file_name, np.uint8, 1)
 #    Ya[i, 0]=ord(lblfile.read(1))

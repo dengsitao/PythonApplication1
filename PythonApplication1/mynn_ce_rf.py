@@ -86,11 +86,11 @@ alpha = 0.003
 row=defs.row
 col=defs.col
 input_dim = row*col
-hidden_dim1 = 500
-hidden_dim2 = 300
+hidden_dim1 = 2000
+hidden_dim2 = 600
 output_dim = 10
 threshold=0.95
-epoch=10
+epoch=0
 layer_num=3
 
 #layer_param1=mybs.layer_param(input_dim, hidden_dim1, sigmoid, sigm_deri, alpha)
@@ -110,7 +110,7 @@ if (do_stochastic==0):
     #tlblNum, Yt = myutils.load_label_data('t10k-labels.idx1-ubyte',0)
     timgRow=row
     timgCol=col
-    timgNum, Xt = myutils.load_real_image_data('img_data_validate_trim', row, col)
+    timgNum, Xt = myutils.load_real_image_data('img_data_validate', row, col)
     tlblNum, Yt = myutils.load_real_label_data('img_label_validate', timgNum)
     #Xt=255-Xt
     Xt=mybs.normalize(Xt)
@@ -127,7 +127,7 @@ if (do_stochastic==0):
         #this is for camera captured
         imgRow=row
         imgCol=col
-        imgNum, Xa = myutils.load_real_image_data('img_data_trim', row, col)
+        imgNum, Xa = myutils.load_real_image_data('img_data', row, col)
         lblNum, Ya = myutils.load_real_label_data('lbl_data',imgNum)
         Xa=mybs.normalize(Xa)
         valiNum=int(imgNum/10)
