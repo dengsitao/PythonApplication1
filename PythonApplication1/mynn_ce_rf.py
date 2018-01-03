@@ -86,11 +86,11 @@ alpha = 0.003
 row=defs.row
 col=defs.col
 input_dim = row*col
-hidden_dim1 = 3000
-hidden_dim2 = 1500
-hidden_dim3 = 500
+#hidden_dim1 = 3000
+#hidden_dim2 = 1500
+#hidden_dim3 = 500
 output_dim = 10
-threshold=0.95
+threshold=0.99
 epoch=10
 
 #layer_num=2
@@ -104,12 +104,24 @@ epoch=10
 #layer_param3=mybs.layer_param(hidden_dim2, output_dim, softmax, sigm_deri, alpha)
 #layer_param=[layer_param1, layer_param2, layer_param3]
 
-layer_num=4
-layer_param1=mybs.layer_param(input_dim, hidden_dim1, relu, relu_deri, alpha)
-layer_param2=mybs.layer_param(hidden_dim1, hidden_dim2, sigmoid, relu_deri, alpha)
+#layer_num=4
+#layer_param1=mybs.layer_param(input_dim, hidden_dim1, relu, relu_deri, alpha)
+#layer_param2=mybs.layer_param(hidden_dim1, hidden_dim2, sigmoid, relu_deri, alpha)
+#layer_param3=mybs.layer_param(hidden_dim2, hidden_dim3, sigmoid, sigm_deri, alpha)
+#layer_param4=mybs.layer_param(hidden_dim3, output_dim, softmax, sigm_deri, alpha)
+#layer_param=[layer_param1, layer_param2, layer_param3, layer_param4]
+
+layer_num=5
+hidden_dim1 = 4000
+hidden_dim2 = 2500
+hidden_dim3 = 1500
+hidden_dim4 = 500
+layer_param1=mybs.layer_param(input_dim, hidden_dim1, sigmoid, sigm_deri, alpha)
+layer_param2=mybs.layer_param(hidden_dim1, hidden_dim2, sigmoid, sigm_deri, alpha)
 layer_param3=mybs.layer_param(hidden_dim2, hidden_dim3, sigmoid, sigm_deri, alpha)
-layer_param4=mybs.layer_param(hidden_dim3, output_dim, softmax, sigm_deri, alpha)
-layer_param=[layer_param1, layer_param2, layer_param3, layer_param4]
+layer_param4=mybs.layer_param(hidden_dim3, hidden_dim4, sigmoid, sigm_deri, alpha)
+layer_param5=mybs.layer_param(hidden_dim4, output_dim, softmax, sigm_deri, alpha)
+layer_param=[layer_param1, layer_param2, layer_param3, layer_param4, layer_param5]
 
 nnetwork = mybs.nnetwork(layer_num, layer_param, input_dim, output_dim, epoch, threshold)
 
