@@ -90,7 +90,7 @@ input_dim = row*col
 #hidden_dim2 = 1500
 #hidden_dim3 = 500
 output_dim = 10
-threshold=0.99
+threshold=0.95
 epoch=10
 
 #layer_num=2
@@ -169,6 +169,6 @@ if (do_stochastic==0):
         nnetwork.dump2file()
 else:
     print('=======train incrementaly=====')
-    nnetwork.reinit_weight_rand()
+    #nnetwork.reinit_weight_rand()
     
 
