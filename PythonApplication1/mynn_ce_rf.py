@@ -41,44 +41,6 @@ def relu(x):
 def relu_deri(output):
     return 1.*(output>0)
 
-
-
-
-def forwardProp(X, weight, activate_func):
-    X1=np.c_[1, X]
-    Z1=np.dot(X1, weight)
-    Res1 = activate_func(Z1)
-    return Res1
-
-# def normalize(X):
-#     return (X-np.mean(X))/np.std(X)
-
-def predict(Xi, Yi, weight1, weight2):
-    num=Yi.size
-    rightSum=0
-    wrongSum=0
-    for j in range(num):
-        #for j in range(1):
-        #read a 28x28 image and a byte label
-        #X=Xa[j+imgNum-valiNum]
-        X=Xi[j]
-        X=X.reshape(1,defs.row*defs.col)
-        y=Yi[j]
-        #y=Ya[j+imgNum-valiNum]
-        #Forward propagation
-        a2=forwardProp(X, weight1, sigmoid)
-        #a2=forwardProp(X, weight1, relu)
-        a3=forwardProp(a2, weight2, softmax)
-        indexd=np.argmax(a3)
-        if indexd==y:
-            rightSum+=1
-        else:
-            wrongSum+=1
-
-    accuracy=rightSum/num
-    print ('predict',' right: ',rightSum,'Wrong: ',wrongSum, accuracy*100, '%')
-    return accuracy
-
 do_stochastic=0
 #default params
 alpha = 0.003
@@ -91,7 +53,7 @@ input_dim = row*col
 #hidden_dim3 = 500
 output_dim = 10
 threshold=0.95
-epoch=10
+epoch=20
 
 #layer_num=2
 #layer_param1=mybs.layer_param(input_dim, hidden_dim1, sigmoid, sigm_deri, alpha)
